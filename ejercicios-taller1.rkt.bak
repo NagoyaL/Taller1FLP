@@ -77,7 +77,6 @@
 ;; Ejemplo de uso:
 ;; > (list-set ’(a b c d) 2 => ’(1 2))(a b (1 2) d)
 
-
 (define list-set
   (lambda (lista n x)
   (cond
@@ -87,74 +86,3 @@
       )
   ))
 
-;: 6.
-;; Función: swapper
-;; Proposito: Recibe una lista de elementos, y dos elementos, realiza el recorrido de toda la lista, retorna una nueva lista similar modificada, poniendo e2 donde encuentra e1 y viceversa.
-;;
-;; Entradas:
-;; e1: elemento 1
-;; e2: elemento 2
-;; l: lista de elementos
-;;
-;; Parámetros:
-;; e1 : representa el elemento 1
-;; e2 : representa el elemento 2
-;; l  : representa la lista de elementos que se recorrera para generar la nueva lista con las modificaciones respectivas donde se encuentre e1 y e2
-;;
-;; Contrato:
-;; (swapper e1 e2 l)
-;;  
-;;   - Valida si la lista es vacia como caso base.
-;;   - Valida si el primer elemento de la lista es igual a e1, de ser asi construye una nueva lista con e2 en la cabeza y sigue contruyendo recursivamente el resto.
-;;   - Valida si el primer elemento de la lista es igual a e2, de ser asi construye una nueva lista con e1 en la cabeza y sigue contruyendo recursivamente el resto.
-;;   - Si ninguna validacion anterior se cumple, se construye la lista con la cabeza de l y se sigue contruyendo recursivamente con el resto de la lista.
-;; Ejemplo de uso:
-;; > (swapper 'x 'y '(y y x y x y x x y)))
-;; > (swapper 'a 'd '(a d () c d))
-
-(define swapper
-  (lambda (e1 e2 l)
-    (cond
-      [(empty? l) empty]
-      [(equal? (car l) e1) (cons e2 (swapper e1 e2 (cdr l)))]
-      [(equal? (car l) e2) (cons e1 (swapper e1 e2 (cdr l)))]
-      [else (cons (car l)  (swapper e1 e2 (cdr l)))]
-      )
-    )
-  )
-;;--------------------------------------------------------------------
-;; 9.
-(define inversions
- (lambda (lista)
-   (cond
-     [(empty? lista) 0]
-     [else (+ (aux-inversions (cdr lista) (car lista)) (inversions (cdr lista)) )]
-     )
-   )
- )
-
-(define aux-inversions
-  (lambda (lista x)
-    (cond
-      [(empty? lista) 0]
-      [(if
-        (> x (car lista))
-        (+ 1 (aux-inversions (cdr lista) x))
-        (+ 0 (aux-inversions (cdr lista) x))
-        )]
-      )
-      )
-  )
-;;--------------------------------------------------------------------
-;; 12.
-(define filter-acum
-  (lambda (a b f acum filter)
-    (cond
-      [(> a b) acum]
-      [(filter a) (f a (filter-acum (+ a 1) b f (+ a acum) filter))]
-      [else (filter-acum (+ a 1) b f acum filter)]
-      )
-    )
-  )
-
-(filter-acum 1 10 + 0 odd?)
