@@ -151,10 +151,69 @@
   (lambda (a b f acum filter)
     (cond
       [(> a b) acum]
-      [(filter a) (f a (filter-acum (+ a 1) b f (+ a acum) filter))]
+      [(filter a) (filter-acum (+ a 1) b f (f acum a) filter)]
       [else (filter-acum (+ a 1) b f acum filter)]
       )
     )
   )
 
-(filter-acum 1 10 + 0 odd?)
+;;---------------------------------------------------------------------
+;;15.
+
+(define count-odd-and-even
+  (lambda (arbol)
+    (cond
+      [(empty? arbol) '(0 0)]
+      [else (list (count-aux arbol even?) (count-aux arbol odd?))]
+      )
+    ))
+
+(define count-aux
+  (lambda (a f)
+    (cond
+      [(empty? a) 0]
+      [(f (car a)) (+ 1 (count-aux (cadr a) f) (count-aux (caddr a) f))]
+      [else (+ 0 (count-aux (cadr a) f) (count-aux (caddr a) f))]
+      )))  
+
+;;---------------------------------------------------------------------
+;;18.
+
+
+(define agregar-inicio
+  (lambda (lista x)
+    (cons x lista)
+      )
+  )
+
+(define agregar-final
+  (lambda (lista x)
+    (cond
+      [(empty? lista) (cons x empty)]
+      [else (cons (car lista) (agregar-final (cdr lista) x))] 
+      )
+    ))
+
+(define suma-listas
+  (lambda (l1 l2)
+    (cond
+      [(empty? l1) empty]
+      [else (cons (+ (car l1) (car l2)) (suma-listas (cdr l1) (cdr l2)) )]
+      )
+    ))
+
+(define pascal
+  (lambda (n)
+    (aux-pascal n 1 '(1))
+    ))
+
+(define aux-pascal
+  (lambda (n step lista)
+    (cond
+      [(= step n) lista]
+      [else (aux-pascal n (+ step 1) (suma-listas (agregar-inicio lista 0) (agregar-final lista 0) ))
+       ]
+      )
+    )
+  )
+
