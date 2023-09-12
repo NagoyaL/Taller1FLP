@@ -86,3 +86,21 @@
       )
   ))
 
+
+;: 4.
+;; Función: list-index
+;;
+;; Proposito:funcion llamada list-index que debe recibir dos
+;; argumentos: un predicado P y una lista L. La funcion retorna el primer elemento de la lista que satisface el predicado L
+;;
+;; Parámetros:
+;;
+;; - lista:La lista de la cual se van a crear las sublistas.
+;; 
+;; Ejemplo de uso:
+;; > (display (filter-in string? '(a b u "univalle" "racket" "flp" 28 90 (1 2 3)))) ;
+;; Output: ("univalle" "racket" "flp")
+
+
+
+
