@@ -1,21 +1,16 @@
 #lang racket
 
 ;: 1.
-;; Función: invert
+;; invert:
+;; Proposito:
+;; List -> List’ :Procedimiento que recibe como parametro una lista que se compone de pares que a su vez son listas de tamaño 2
+;; y se retorna una lista similar a la inicial con los pares invertidos 
 ;;
-;; Proposito: Recibe como parametro una lista que se compone de pares que a su vez son listas de tamaño 2
-;; y se retorna una lista similar a la iniciar con los pares invertidos 
-;; Parámetros:
-;; - lista: La lista de pares que se va a invertir.
-;;
-;; Contrato:
-;; (invert lista)
-;;   - lista: Lista de pares (listas de exactamente dos elementos).
-;;   - Retorna una nueva lista que contiene pares con los elementos invertidos.
-;;   - Si la lista está vacía, devuelve una lista vacía ('()).
-;;
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
 ;; Ejemplo de uso:
 ;; (invert '((1 2) (3 4) (5 6))) => '((2 1) (4 3) (6 5))
+
 
 (define invert
   (lambda(lista)
@@ -30,20 +25,13 @@
   ))
 
 ;: 2.
-;; Función: down
+;;down:
+;; Proposito:
+;; List -> List’ :Procedimiento que convierte la lista en una lista donde cada elemento es asociado a un nivel más
+;; de parentesis comparado con su estado original 
 ;;
-;; Proposito: Convierte la lista en una lista donde cada elemento es asociado a un nivel más
-;; de parentesis comparado con su estado original
-;;
-;; Parámetros:
-;; - lista:La lista de la cual se van a crear las sublistas.
-;;
-;;
-;; Contrato:
-;; (down lista)
-;;   - lista: Lista de elementos.
-;;   - Retorna una nueva lista de sublistas, donde cada sublista contiene un solo elemento de la lista original.
-;;   - Si la lista está vacía, devuelve una lista vacía (empty).
+;;<lista> := ()
+;; := (<valor-de-scheme> <lista>)
 ;;
 ;; Ejemplo de uso:
 ;; (down ’(1 2 3)) => '((1) (2) (3))
