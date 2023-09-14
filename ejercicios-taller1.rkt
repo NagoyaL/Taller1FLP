@@ -102,6 +102,30 @@
 
 ;;5.
 ;;Función: list-index
+;; Propósito:
+;;   Esta función recibe un predicado P y una lista L. Retorna (desde una posición inicial 0) el primer elemento de la lista
+;;   que satisface el predicado P. Si no se encuentra ningún elemento que cumpla con el predicado, la función retorna #f.
+;;
+;; Signatura:
+;;   (list-index P L)
+;; 
+;; Expresiones BNF:
+;;   <lista> ::= ()
+;;           |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplos de uso:
+;;   (list-index number? '(a 2 (1 3) b 7)) => 1
+;;   (list-index symbol? '(a (b c) 17 foo)) => 0
+;;   (list-index symbol? '(1 2 (a b) 3)) => #f
+;;
+;; Requisitos:
+;;   - El predicado P debe ser una función unaria que acepta un argumento y retorna un valor booleano.
+;;   - La entrada L debe ser una lista que cumpla con la estructura definida por las expresiones BNF.
+;;   - La función busca el primer elemento de la lista que satisface el predicado P y retorna su posición (indexando desde 0).
+;;   - Si ningún elemento cumple con el predicado, la función retorna #f.
+;;
+
+
 (define list-index
   (lambda (P L)
     (letrec ((list-index-helper
@@ -153,15 +177,39 @@
 
 ;;8.
 ;;Función: mapping
+;; Propósito:
+;;   Esta función recibe una función unaria F, y dos listas L1 y L2 de números. Retorna una lista de pares (a, b), donde a es un elemento de L1 y b es un elemento de L2, y se cumple la propiedad de que (F a) = b.
+;;
+;; Signatura:
+;;   (mapping F L1 L2)
+;; 
+;; Expresiones BNF:
+;;   <lista> ::= ()
+;;           |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplos de uso:
+;;   (mapping (lambda (d) (* d 2)) '(1 2 3) '(2 4 6)) => '((1 2) (2 4) (3 6))
+;;   (mapping (lambda (d) (* d 3)) '(1 2 2) '(2 4 6)) => '((2 6))
+;;   (mapping (lambda (d) (* d 2)) '(1 2 3) '(3 9 12)) => '()
+;;
+;; Requisitos:
+;;   - La función recibe una función unaria F, que toma un argumento y devuelve un número.
+;;   - L1 y L2 deben ser listas que cumplan con la estructura definida por las expresiones BNF.
+;;   - La función genera pares (a, b) donde a es un elemento de L1 y b es un elemento de L2.
+;;   - Se verifica que (F a) = b para cada par (a, b) en la lista resultante.
+;;
+
 (define mapping
   (lambda (F L1 L2)
-    (define (helper L1 L2)
-      (cond
-        [(or (null? L1) (null? L2)) '()]
-        [(= (F (car L1)) (car L2))
-         (cons (list (car L1) (car L2))
-               (helper (cdr L1) (cdr L2)))]
-        [else (helper (cdr L1) (cdr L2))]
+    (define helper
+      (lambda (L1 L2)
+        (cond
+          [(or (null? L1) (null? L2)) '()]
+          [(= (F (car L1)) (car L2))
+           (cons (list (car L1) (car L2))
+                 (helper (cdr L1) (cdr L2)))]
+          [else (helper (cdr L1) (cdr L2))]
+          )
         )
       )
     (helper L1 L2)
@@ -197,6 +245,28 @@
   )
 ;;--------------------------------------------------------------------
 ;; 11.
+;; Función: zip:
+;; Propósito:
+;;   Esta función recibe una función binaria F y dos listas L1 y L2 de igual tamaño. Retorna una lista donde la posición n-ésima corresponde al resultado de aplicar la función F sobre los elementos en la posición n-ésima en L1 y L2.
+;;
+;; Signatura:
+;;   (zip F L1 L2)
+;; 
+;; Expresiones BNF:
+;;   <lista> ::= ()
+;;           |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplos de uso:
+;;   (zip + '(1 4) '(6 2)) => '(7 6)
+;;   (zip * '(11 5 6) '(10 9 8)) => '(110 45 48)
+;;
+;; Requisitos:
+;;   - La función recibe una función binaria F que toma dos argumentos y devuelve un resultado.
+;;   - L1 y L2 deben ser listas que cumplan con la estructura definida por las expresiones BNF.
+;;   - Las listas L1 y L2 deben tener el mismo tamaño.
+;;   - La función crea una lista donde la posición n-ésima contiene el resultado de aplicar F a los elementos correspondientes de L1 y L2.
+;;
+
 (define zip
   (lambda (F L1 L2)
     (if (null? L1)
@@ -219,6 +289,27 @@
 
 ;;---------------------------------------------------------------------
 ;;14.
+;;Función: path
+;; Propósito:
+;;   Esta función recibe un número entero n y un árbol binario de búsqueda (BST) representado como una lista. Retorna una lista que representa la ruta desde el nodo raíz del árbol hasta el nodo que contiene el número n. La ruta se indica por cadenas "left" y "right".
+;;
+;; Signatura:
+;;   (path n BST)
+;; 
+;; Expresiones BNF:
+;;   <árbol-binario> ::= ()
+;;                   |  (<número-entero> <árbol-binario> <árbol-binario>)
+;;
+;; Ejemplos de uso:
+;;   (path 17 '(14 (7 () (12 () ())) (26 (20 (17 () ()) ()) (31 () ())))) => '(right left left)
+;;   (path 5 '(10 (5 () ()) (15 (12 () ()) (20 () ())))) => '(left)
+;;
+;; Requisitos:
+;;   - La función recibe un número entero n y un árbol binario de búsqueda (BST) que cumple con la estructura definida por las expresiones BNF.
+;;   - La función busca la ruta desde el nodo raíz del árbol hasta el nodo que contiene el número n.
+;;   - La ruta se representa como una lista de cadenas "left" y "right".
+;;   - Si el número n es encontrado en el nodo raíz, el procedimiento retorna una lista vacía ().
+;;
 (define path
   (lambda (n BST)
     (define path-helper
@@ -257,6 +348,28 @@
 
 ;;---------------------------------------------------------------------
 ;;17.
+;;Función: prod-scalar-matriz
+;; Propósito:
+;;   Esta función recibe una matriz representada como una lista de listas y un vector representado como una lista. Retorna el resultado de realizar la multiplicación matriz por vector.
+;;
+;; Signatura:
+;;   (prod-scalar-matriz matriz vector)
+;; 
+;; Expresiones BNF:
+;;   <matriz> ::= ()
+;;            |  (<lista> <matriz>)
+;;   <lista>  ::= ()
+;;            |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplos de uso:
+;;   (prod-scalar-matriz '((1 1) (2 2)) '(2 3)) => '((2 3) (4 6))
+;;   (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3)) => '((2 3) (4 6) (6 9))
+;;
+;; Requisitos:
+;;   - La función recibe una matriz como una lista de listas y un vector como una lista.
+;;   - La matriz y el vector deben cumplir con la estructura definida por las expresiones BNF.
+;;   - La función realiza la multiplicación de la matriz por el vector.
+;;
 (define prod-scalar-matriz
   (lambda (matriz vector)
     (define producto-fila
