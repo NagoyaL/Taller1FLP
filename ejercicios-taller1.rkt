@@ -667,6 +667,56 @@
                       (4 (3 () ())())
                       (3 (1 () ())())))
 ;;---------------------------------------------------------------------
+
+;; 16.
+;; Función: Operar-binarias
+;;
+;; Proposito: 
+;; N X F X N -> N’: recibe como parametro una operacion binaria valida y retorna el resultado de hacer
+;; las operaciones suma, resta y multiplicacion correspondientes
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; Ejemplo de uso:
+;; > (Operar-binarias '(5 suma (7 resta 2)))
+
+
+(define Operar-binarias
+  (lambda (x)
+    (cond
+      [(number? x) x]
+      [(list? x) (operacion (Operar-binarias (car x)) (cadr x) (Operar-binarias (caddr x)))]
+  )))
+
+
+
+;; Función: operacion
+;;
+;; Proposito: 
+;; F X N X N -> N’: Realiza una operación matemática entre dos números según la función especificada.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; Ejemplo de uso:
+;; > (apply-operation '+ 3 5)
+
+
+
+
+(define operacion
+  (lambda (a operador b)
+    (cond
+      [(equal? operador 'suma) (+ a b)]
+      [(equal? operador 'resta) (- a b)]
+      [(equal? operador 'multiplica) (* a b)]
+      )
+    ))
+
+
 ;;17.
 ;;Función: prod-scalar-matriz
 ;; Propósito:
