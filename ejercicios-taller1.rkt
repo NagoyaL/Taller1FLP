@@ -130,7 +130,28 @@
 ;;   - La función busca el primer elemento de la lista que satisface el predicado P y retorna su posición (indexando desde 0).
 ;;   - Si ningún elemento cumple con el predicado, la función retorna #f.
 ;;
-
+;; Función auxiliar: list-index-helper
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `list-index`. Recibe una lista `L` y un índice `index` como
+;;   argumentos. Su propósito es buscar el primer elemento en la lista `L` que satisface el predicado `P` y retornar su
+;;   posición (indexando desde 0). Si ningún elemento satisface el predicado, la función retorna `#f`.
+;;
+;; Signatura:
+;;   (list-index-helper L index)
+;; 
+;; Expresiones BNF:
+;;   <lista> ::= ()
+;;           |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;;   (list-index-helper '(a 2 (1 3) b 7) 0) => 1
+;;
+;; Requisitos:
+;;   - La entrada `L` es una lista que cumple con la estructura definida por las expresiones BNF.
+;;   - La entrada `P` es un predicado que acepta un argumento y devuelve un valor booleano.
+;;   - La función busca el primer elemento en la lista `L` que satisface el predicado `P` y retorna su posición (indexando desde 0).
+;;   - Si ningún elemento cumple con el predicado, la función retorna `#f`.
+;;
 
 (define list-index
   (lambda (P L)
@@ -168,6 +189,75 @@
     )
   )
 
+;: 7.
+;; Función: cartesian-product
+;;
+;; Proposito: 
+;; L x L -> L’: recibir como argumentos 2 listas de sımbolos sin repeticiones L1 y L2 y
+;; retornar una lista de tuplas que representen el producto cartesiano entre L1
+;; y L2. 
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;; > (cartesian-product '(a b c) '(x y))
+
+
+
+
+(define cartesian-product
+  (lambda(L1 L2)
+  (if (null? L1)
+      '()
+      (help (help2 (lambda (x) (list (car L1) x)) L2)
+                 (cartesian-product (cdr L1) L2)))))
+
+
+
+;; Función: help
+;;
+;; Proposito: 
+;; L x L -> L’: Concatena dos listas, lst1 y lst2.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;;  > (help '(1 2 3) '(4 5 6))
+
+(define help
+  (lambda(lst1 lst2)
+  (if (null? lst1)
+      lst2
+      (cons (car lst1) (help (cdr lst1) lst2)))))
+
+
+
+
+;; Función: help2
+;;
+;; Propósito:
+;; F x L -> L’: Aplica una función dada (func) a cada elemento de una lista (lst) y retorna
+;; una nueva lista que contiene los resultados de aplicar func a cada elemento.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;;
+;; > (define (cuadrado x) (* x x))
+;; > (help2 cuadrado '(1 2 3 4))
+
+(define help2
+  (lambda(func lst)
+  (if (null? lst)
+      '()
+      (cons (func (car lst))
+            (help2 func (cdr lst))))))
+
+
+
 ;;8.
 ;;Función: mapping
 ;; Propósito:
@@ -191,7 +281,29 @@
 ;;   - La función genera pares (a, b) donde a es un elemento de L1 y b es un elemento de L2.
 ;;   - Se verifica que (F a) = b para cada par (a, b) en la lista resultante.
 ;;
-
+;; Función auxiliar: helper
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `mapping`. Recibe dos listas `L1` y `L2`, junto con una función
+;;   unaria `F` que toma un elemento de `L1` y devuelve un valor. Su propósito es mapear los elementos de `L1` y `L2` de acuerdo
+;;   con la función `F` y construir una lista de pares (a, b) donde `a` es un elemento de `L1` y `b` es un elemento de `L2`
+;;   que cumple con la propiedad F(a) = b. Retorna la lista de pares resultante.
+;;
+;; Signatura:
+;;   (helper L1 L2)
+;; 
+;; Expresiones BNF:
+;;   <lista> ::= ()
+;;           |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;;   (helper '(1 2 3) '(2 4 6)) => '((1 2) (2 4) (3 6))
+;;
+;; Requisitos:
+;;   - La entrada `L1` es una lista que cumple con la estructura definida por las expresiones BNF.
+;;   - La entrada `L2` es una lista que cumple con la estructura definida por las expresiones BNF.
+;;   - La entrada `F` es una función unaria que acepta un argumento y devuelve un valor.
+;;   - La función mapea los elementos de `L1` y `L2` de acuerdo con la función `F`, construye una lista de pares y la retorna.
+;;
 (define mapping
   (lambda (F L1 L2)
     (define helper
@@ -259,6 +371,57 @@
 (inversions '(1 2 3 4))
 
 ;;--------------------------------------------------------------------
+
+
+;: 10.
+;; Función: up
+;;
+;; Proposito: 
+;; L -> L’: Recibe una lista L y devuelve una lista con los elementos de L y, si encuentra
+;; sublistas en L, los elementos de esas sublistas también, eliminando un nivel de
+;; anidación.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;; > (up '((1 2) (3 4)))
+
+
+(define up
+  (lambda (L)
+  (cond
+    ((null? L) '()) ; Caso base: si la lista está vacía, devuelve una lista vacía.
+    ((list? (car L)) ; Si el primer elemento es una lista, elimina un par de paréntesis y concatena el resultado.
+     (aux (car L) (up (cdr L))))
+    (else ; Si el primer elemento no es una lista, simplemente lo incluye en el resultado y continúa con el resto de la lista.
+     (cons (car L) (up (cdr L)))))))
+
+
+
+;; Función: aux
+;;
+;; Proposito: 
+;; L x L -> L’: Esta función auxiliar toma dos listas, lst1 y lst2, y devuelve una nueva lista
+;; que representa el producto cartesiano entre lst1 y lst2. Cada elemento de la lista
+;; resultante es una tupla que contiene un elemento de lst1 y un elemento de lst2.
+;;  
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;; > (up '((1 2) (3 4)))
+
+
+(define aux
+ (lambda (lst1 lst2)
+  (cond
+    ((null? lst1) lst2) ; Si la primera lista está vacía, devuelve la segunda lista.
+    (else (cons (car lst1) (aux (cdr lst1) lst2))))))
+
+
+
 ;; 11.
 ;; Función: zip:
 ;; Propósito:
@@ -317,6 +480,63 @@
 (filter-acum 1 10 + 0 odd?)
 (filter-acum 1 10 + 0 even?)
 
+;;----------------------------------------------------------------------------------------------------------------------------------------
+
+;: 13.
+;; Función: operate
+;;
+;; Proposito: 
+;; L X L -> N’: Realizar operaciones matemáticas en pares de números utilizando operadores
+;; especificados en una lista y números en otra lista.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; 
+;; 
+;; Ejemplo de uso:
+;; > (operate '(+ * + - *) '(1 2 8 4 11 6))
+
+
+(define operate
+  (lambda (funcs nums)
+  (define apply-operations
+    (lambda (funcs nums)
+      (if (null? funcs)
+          nums
+          (apply-operations (cdr funcs) (cons (apply-operation (car funcs) (car nums) (cadr nums)) (cddr nums))))))
+
+
+
+;; Función: apply-operation
+;;
+;; Proposito: 
+;; F X N X N -> N’: Aplicar una operación matemática a dos números.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; 
+;; 
+;; Ejemplo de uso:
+;; > (apply-operation '+ 5 3)
+
+
+
+  (define apply-operation
+    (lambda (func num1 num2)
+    (cond
+      ((eq? func '+) (+ num1 num2))
+      ((eq? func '-) (- num1 num2))
+      ((eq? func '*) (* num1 num2))
+      ((eq? func '/) (/ num1 num2))
+      (else (error "Operación no válida")))))
+  
+  (apply-operations funcs nums)))
+
+
 ;;---------------------------------------------------------------------
 ;;14.
 ;;Función: path
@@ -340,6 +560,50 @@
 ;;   - La ruta se representa como una lista de cadenas "left" y "right".
 ;;   - Si el número n es encontrado en el nodo raíz, el procedimiento retorna una lista vacía ().
 ;;
+;; Función auxiliar: path-helper
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `path`. Recibe dos argumentos: `current-path` y `current-node`,
+;;   que representan el camino actual y el nodo actual en un árbol binario de búsqueda (BST). Su propósito es encontrar el camino
+;;   desde la raíz del árbol hasta el nodo con el valor `n` en el BST y representarlo como una lista de direcciones ('left' o 'right').
+;;   Retorna el camino como una lista de direcciones o una lista vacía si el valor `n` no se encuentra en el árbol.
+;;
+;; Signatura:
+;;   (path-helper current-path current-node)
+;; 
+;; Expresiones BNF:
+;;   <nodo> ::= ()
+;;          |  (<valor-de-scheme> <nodo>)
+;;
+;; Ejemplo de uso:
+;;   (path-helper '() '(10 (5 () ()) (15 () (20 () ())))) => '("left" "right")
+;;
+;; Requisitos:
+;;   - La entrada `current-path` es una lista que representa el camino actual desde la raíz del árbol hasta el nodo actual.
+;;   - La entrada `current-node` es un nodo del árbol binario de búsqueda.
+;;   - La función busca el camino desde la raíz hasta el nodo con el valor `n` en el BST y lo representa como una lista de direcciones.
+;;   - Si el valor `n` no se encuentra en el árbol, la función retorna una lista vacía.
+;; Función auxiliar: multiplicar-matriz
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `prod-scalar-matriz`. Recibe una matriz representada como una
+;;   lista de listas y un vector representado como una lista. Su propósito es multiplicar la matriz por el vector dado y
+;;   retornar el resultado como una nueva matriz.
+;;
+;; Signatura:
+;;   (multiplicar-matriz matriz vector)
+;; 
+;; Expresiones BNF:
+;;   <matriz> ::= ()
+;;            |  (<lista> <matriz>)
+;;   <lista>  ::= ()
+;;            |  (<valor-de-scheme> <lista>)
+;;
+;; Requisitos:
+;;   - La entrada `matriz` debe ser una matriz representada como una lista de listas que cumpla con la estructura definida por las
+;;     expresiones BNF.
+;;   - La entrada `vector` debe ser un vector representado como una lista.
+;;   - La función realiza la multiplicación de la matriz por el vector, y retorna el resultado como una nueva matriz.
+;;
+
 (define path
   (lambda (n BST)
     (define path-helper
@@ -348,13 +612,13 @@
           ((null? current-node) '())
           ((= n (car current-node)) current-path)
           ((< n (car current-node))
-           (path-helper (append current-path '("left")) (cadr current-node)))
+           (cons "left" (path-helper current-path (cadr current-node))))
           (else
-           (path-helper (append current-path '("right")) (caddr current-node)))
+           (cons "right" (path-helper current-path (caddr current-node))))
           )))
     (path-helper '() BST)
-    )
   )
+)
 
 
 ;;---------------------------------------------------------------------
