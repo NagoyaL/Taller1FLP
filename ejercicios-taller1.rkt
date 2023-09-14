@@ -7,7 +7,7 @@
 ;; y se retorna una lista similar a la inicial con los pares invertidos 
 ;;
 ;;<lista> := ()
-;; := (<valor-de-scheme> <lista>)
+;;        := (<lista-de-pares> <lista>)
 ;; Ejemplo de uso:
 ;; (invert '((1 2) (3 4) (5 6))) => '((2 1) (4 3) (6 5))
 
@@ -24,14 +24,19 @@
       )
   ))
 
+;;Pruebas
+(invert '((1 2) (3 4) (5 6)))
+(invert '((6 7) (1 4) (0 7)))
+
 ;: 2.
 ;;down:
 ;; Proposito:
 ;; List -> List’ :Procedimiento que convierte la lista en una lista donde cada elemento es asociado a un nivel más
 ;; de parentesis comparado con su estado original 
 ;;
-;;<lista> := ()
-;; := (<valor-de-scheme> <lista>)
+;;<lista>      := ()
+;;<lista>      := (<lista-exp> <lista>)
+;;<lista-exp>  := <lista-valores-scheme>
 ;;
 ;; Ejemplo de uso:
 ;; (down ’(1 2 3)) => '((1) (2) (3))
@@ -43,24 +48,22 @@
         )
       )
   )
+(down '(1 2 3))
+(down '(un (objeto (mas)) complicado))
+
 
 ;: 3.
-;; Función: list-set
+;; list-set
 ;;
 ;; Proposito:modificar una lista dada (L) al reemplazar el elemento en la posición específica n (indexando desde cero)
 ;;con el elemento x proporcionado como argumento. La función devuelve una nueva lista que es idéntica a la lista original (L),
 ;;excepto que contiene el elemento x en la posición indicada.
 ;;
-;; Parámetros:
-;; - lista: representa la lista en la que deseas realizar la modificación.
-;; - n: representa la posición (indexando desde cero) en la lista L donde deseas insertar el elemento x.  
-;; - x: representa el elemento que deseas insertar en la posición
+;;<lista>      := ()
+;;<lista>      := <lista-exp> <lista>
+;;<lista-exp>  := <valores-scheme>
+;;<lista-exp>  := <lista-valores-scheme>
 ;;
-;; Contrato:
-;; (list-set lista n x)
-;;  
-;;   - Retorna una nueva lista con el elemento x en la posicion n
-;;   - Si la lista está vacía, devuelve una lista vacía (empty).
 ;;
 ;; Ejemplo de uso:
 ;; > (list-set ’(a b c d) 2 => ’(1 2))(a b (1 2) d)
@@ -75,16 +78,19 @@
       )
   ))
 
+;;Pruebas:
+(list-set '(a b c d) 2 'c)
+(list-set '(a b c d) 3 '(1 5 10))
 
 ;: 4.
-;; Función: filter-in
+;; filter-in
 ;;
 ;; Proposito: 
 ;; P x L -> L’: con los dos argumentos recibidos (un predicado P y una lista L) retornar una lista que
 ;; contiene los elementos que pertenecen a L y que satisfacen el predicado P.
 ;;
 ;; <lista> := ()
-;; := (<valor-de-scheme> <lista>)
+;;         := (<valor-de-scheme> <lista>)
 ;;
 ;; Ejemplo de uso:
 ;; > (filter-in number? '(a 2 (1 3) b 7))
@@ -143,23 +149,10 @@
 ;; Función: swapper
 ;; Proposito: Recibe una lista de elementos, y dos elementos, realiza el recorrido de toda la lista, retorna una nueva lista similar modificada, poniendo e2 donde encuentra e1 y viceversa.
 ;;
-;; Entradas:
-;; e1: elemento 1
-;; e2: elemento 2
-;; l: lista de elementos
 ;;
-;; Parámetros:
-;; e1 : representa el elemento 1
-;; e2 : representa el elemento 2
-;; l  : representa la lista de elementos que se recorrera para generar la nueva lista con las modificaciones respectivas donde se encuentre e1 y e2
+;; <lista> := ()
+;;         := (<valor-de-scheme> <lista>)
 ;;
-;; Contrato:
-;; (swapper e1 e2 l)
-;;  
-;;   - Valida si la lista es vacia como caso base.
-;;   - Valida si el primer elemento de la lista es igual a e1, de ser asi construye una nueva lista con e2 en la cabeza y sigue contruyendo recursivamente el resto.
-;;   - Valida si el primer elemento de la lista es igual a e2, de ser asi construye una nueva lista con e1 en la cabeza y sigue contruyendo recursivamente el resto.
-;;   - Si ninguna validacion anterior se cumple, se construye la lista con la cabeza de l y se sigue contruyendo recursivamente con el resto de la lista.
 ;; Ejemplo de uso:
 ;; > (swapper 'x 'y '(y y x y x y x x y)))
 ;; > (swapper 'a 'd '(a d () c d))
@@ -222,6 +215,18 @@
 
 ;;--------------------------------------------------------------------
 ;; 9.
+;; Función: inversions
+;; Proposito: recibe como entradauna lista L, y determina el numero de inversiones de la lista
+;;
+;;
+;;
+;; <lista> := ()
+;;         := (<numero> <lista>)
+;;
+;; Ejemplo de uso:
+;; > (inversions ’(2 3 8 6 1))
+;; >  (inversions ’(1 2 3 4))
+
 (define inversions
  (lambda (lista)
    (cond
@@ -231,6 +236,11 @@
    )
  )
 
+
+;;aux-inversion
+;;
+;;Recibe el primer elemento de la lista y el resto, valida y cuenta las inversiones que tiene el elemento x en la lista.
+;;
 (define aux-inversions
   (lambda (lista x)
     (cond
@@ -243,6 +253,11 @@
       )
       )
   )
+
+;;PRUEBAS
+(inversions '(2 3 8 6 1))
+(inversions '(1 2 3 4))
+
 ;;--------------------------------------------------------------------
 ;; 11.
 ;; Función: zip:
@@ -277,6 +292,18 @@
 
 ;;--------------------------------------------------------------------
 ;; 12.
+;; Función: filter-acum
+;; Proposito:  El procedimiento filter-acum aplicara la
+;; funcion binaria F a todos los elementos que estan en el intervalo [a, b] y que
+;; a su vez todos estos elementos cumplen con el predicado de la funcion filter,
+;; el resultado se debe ir conservando en acum y debe retornarse el valor final de acum
+;;
+;; Ejemplo de uso:
+;;> (filter-acum 1 10 + 0 odd?) => 25
+;;> (filter-acum 1 10 + 0 even?) => 30
+
+
+
 (define filter-acum
   (lambda (a b f acum filter)
     (cond
@@ -286,6 +313,9 @@
       )
     )
   )
+;;PRUEBAS:
+(filter-acum 1 10 + 0 odd?)
+(filter-acum 1 10 + 0 even?)
 
 ;;---------------------------------------------------------------------
 ;;14.
@@ -329,6 +359,19 @@
 
 ;;---------------------------------------------------------------------
 ;;15.
+;;count-odd-and-even
+;;
+;;Proposito: toma un  ́arbol binario y retorna una lista con dos elementos correspondientes
+;; a la cantidad de pares e impares en arbol.
+;;
+;;<arbol> :=()
+;;<arbol> :=<int> <arbol> <arbol>
+;;
+;;ejemplos:
+;;(count-odd-and-even ’(14 (7 () (12 () ()))
+;;(26 (20 (17 () ())
+;;())
+;;(31 () ())))) => (4 3)
 
 (define count-odd-and-even
   (lambda (arbol)
@@ -337,7 +380,9 @@
       [else (list (count-aux arbol even?) (count-aux arbol odd?))]
       )
     ))
-
+;; count-aux
+;; a f => int
+;;proposito: recibe el arbol y el predicado de par e impar, con el fin de retornar el total de elementos que cumplen con el predicado
 (define count-aux
   (lambda (a f)
     (cond
@@ -345,7 +390,15 @@
       [(f (car a)) (+ 1 (count-aux (cadr a) f) (count-aux (caddr a) f))]
       [else (+ 0 (count-aux (cadr a) f) (count-aux (caddr a) f))]
       )))  
+;;pruebas
+(count-odd-and-even '(14 (7 () (12 () ()))
+(26 (20 (17 () ())
+())
+(31 () ()))))
 
+(count-odd-and-even '(5
+                      (4 (3 () ())())
+                      (3 (1 () ())())))
 ;;---------------------------------------------------------------------
 ;;17.
 ;;Función: prod-scalar-matriz
@@ -392,14 +445,30 @@
 
 ;;---------------------------------------------------------------------
 ;;18.
+;;pascal
+;;
+;;Proposito: Recibe un numero entero n, retorna la enesima fila del triangulo de pascal
+;;
+;;<lista> :=<int>
+;;<lista> :=<int> <lista>
+;;
+;;ejemplos:
+;;> (pascal 5) => (1 4 6 4 1)
+;;> (pascal 1) => (1)
+(define pascal
+  (lambda (n)
+    (aux-pascal n 1 '(1))
+    ))
 
-
+;;agregar-inicio
+;;proposito: recibe una lista y un elemento x, retorna una lista con el elemento x en la cabeza de la lista.
 (define agregar-inicio
   (lambda (lista x)
     (cons x lista)
       )
   )
-
+;;agregar-final
+;;proposito: recibe una lista y un elemento x, retorna una lista con el elemento x al final de la lista.
 (define agregar-final
   (lambda (lista x)
     (cond
@@ -407,7 +476,8 @@
       [else (cons (car lista) (agregar-final (cdr lista) x))] 
       )
     ))
-
+;;suma-listas
+;;proposito: recibe dos listas y retorna una lista con la suma (l1 + l2) de acuerdo a su posicion correspondiente.
 (define suma-listas
   (lambda (l1 l2)
     (cond
@@ -416,11 +486,11 @@
       )
     ))
 
-(define pascal
-  (lambda (n)
-    (aux-pascal n 1 '(1))
-    ))
 
+;;aux-pascal
+;; proposito: recibe la lista, el n y el step, se encarga de recibir los datos inicializados desde la funcion pascal y realizar
+;; la recursion de las sumas, con el fin de obtener la fila siguiente del triangulo de pascal.
+;; n es el final de la recursion, step se encarga de contar la fila actual.
 (define aux-pascal
   (lambda (n step lista)
     (cond
@@ -430,3 +500,8 @@
       )
     )
   )
+
+
+;;PRUEBAS PASCAL:
+ (pascal 5)
+ (pascal 1)
