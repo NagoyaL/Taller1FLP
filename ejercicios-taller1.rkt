@@ -75,6 +75,35 @@
       )
   ))
 
+;: 4.
+;; Función: filter-in
+;;
+;; Proposito: con los dos argumentos recibidos (un predicado P y una lista L) retornar una lista que
+;; contiene los elementos que pertenecen a L y que satisfacen el predicado P.
+;;
+;; Parámetros:
+;; - lista: representa la lista en la que deseas realizar la modificación.
+;; - P: predicado con el que se realizara el filtro.
+;; 
+;;
+;; Contrato:
+;; (filter-in P lista)
+;;  
+;;   - Retorna una nueva lista que contiene los elementos que pertenecen a L y que satisfacen el predicado P
+;;   - Si la lista está vacía, devuelve una lista vacía (empty).
+;;
+;; Ejemplo de uso:
+;; > (filter-in number? '(a 2 (1 3) b 7))
+
+
+(define filter-in
+  (lambda (P L)
+    (if (null? L)
+        '()
+        (if (P (car L))
+            (cons (car L) (filter-in P (cdr L)))
+            (filter-in P (cdr L))))))
+
 ;: 6.
 ;; Función: swapper
 ;; Proposito: Recibe una lista de elementos, y dos elementos, realiza el recorrido de toda la lista, retorna una nueva lista similar modificada, poniendo e2 donde encuentra e1 y viceversa.
