@@ -175,7 +175,7 @@
 ;;         := (<valor-de-scheme> <lista>)
 ;;
 ;; Ejemplo de uso:
-;; > (swapper 'x 'y '(y y x y x y x x y)))
+;; > (swapper 'x 'y '(y y x y x y x x y))
 ;; > (swapper 'a 'd '(a d () c d))
 
 (define swapper
@@ -188,6 +188,9 @@
       )
     )
   )
+;;Pruebas
+(swapper 'x 'y '(y y x y x y x x y))
+(swapper 'a 'd '(a d () c d))
 
 ;: 7.
 ;; Función: cartesian-product
