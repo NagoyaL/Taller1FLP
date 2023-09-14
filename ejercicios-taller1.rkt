@@ -75,6 +75,31 @@
       )
   ))
 
+
+;: 4.
+;; Función: filter-in
+;;
+;; Proposito: 
+;; P x L -> L’: con los dos argumentos recibidos (un predicado P y una lista L) retornar una lista que
+;; contiene los elementos que pertenecen a L y que satisfacen el predicado P.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;; > (filter-in number? '(a 2 (1 3) b 7))
+
+
+(define filter-in
+  (lambda (P L)
+    (if (null? L)
+        '()
+        (if (P (car L))
+            (cons (car L) (filter-in P (cdr L)))
+            (filter-in P (cdr L))))))
+
+
+
 ;;5.
 ;;Función: list-index
 (define list-index
