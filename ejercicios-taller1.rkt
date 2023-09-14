@@ -124,7 +124,28 @@
 ;;   - La función busca el primer elemento de la lista que satisface el predicado P y retorna su posición (indexando desde 0).
 ;;   - Si ningún elemento cumple con el predicado, la función retorna #f.
 ;;
-
+;; Función auxiliar: list-index-helper
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `list-index`. Recibe una lista `L` y un índice `index` como
+;;   argumentos. Su propósito es buscar el primer elemento en la lista `L` que satisface el predicado `P` y retornar su
+;;   posición (indexando desde 0). Si ningún elemento satisface el predicado, la función retorna `#f`.
+;;
+;; Signatura:
+;;   (list-index-helper L index)
+;; 
+;; Expresiones BNF:
+;;   <lista> ::= ()
+;;           |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;;   (list-index-helper '(a 2 (1 3) b 7) 0) => 1
+;;
+;; Requisitos:
+;;   - La entrada `L` es una lista que cumple con la estructura definida por las expresiones BNF.
+;;   - La entrada `P` es un predicado que acepta un argumento y devuelve un valor booleano.
+;;   - La función busca el primer elemento en la lista `L` que satisface el predicado `P` y retorna su posición (indexando desde 0).
+;;   - Si ningún elemento cumple con el predicado, la función retorna `#f`.
+;;
 
 (define list-index
   (lambda (P L)
@@ -198,7 +219,29 @@
 ;;   - La función genera pares (a, b) donde a es un elemento de L1 y b es un elemento de L2.
 ;;   - Se verifica que (F a) = b para cada par (a, b) en la lista resultante.
 ;;
-
+;; Función auxiliar: helper
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `mapping`. Recibe dos listas `L1` y `L2`, junto con una función
+;;   unaria `F` que toma un elemento de `L1` y devuelve un valor. Su propósito es mapear los elementos de `L1` y `L2` de acuerdo
+;;   con la función `F` y construir una lista de pares (a, b) donde `a` es un elemento de `L1` y `b` es un elemento de `L2`
+;;   que cumple con la propiedad F(a) = b. Retorna la lista de pares resultante.
+;;
+;; Signatura:
+;;   (helper L1 L2)
+;; 
+;; Expresiones BNF:
+;;   <lista> ::= ()
+;;           |  (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;;   (helper '(1 2 3) '(2 4 6)) => '((1 2) (2 4) (3 6))
+;;
+;; Requisitos:
+;;   - La entrada `L1` es una lista que cumple con la estructura definida por las expresiones BNF.
+;;   - La entrada `L2` es una lista que cumple con la estructura definida por las expresiones BNF.
+;;   - La entrada `F` es una función unaria que acepta un argumento y devuelve un valor.
+;;   - La función mapea los elementos de `L1` y `L2` de acuerdo con la función `F`, construye una lista de pares y la retorna.
+;;
 (define mapping
   (lambda (F L1 L2)
     (define helper
@@ -310,6 +353,50 @@
 ;;   - La ruta se representa como una lista de cadenas "left" y "right".
 ;;   - Si el número n es encontrado en el nodo raíz, el procedimiento retorna una lista vacía ().
 ;;
+;; Función auxiliar: path-helper
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `path`. Recibe dos argumentos: `current-path` y `current-node`,
+;;   que representan el camino actual y el nodo actual en un árbol binario de búsqueda (BST). Su propósito es encontrar el camino
+;;   desde la raíz del árbol hasta el nodo con el valor `n` en el BST y representarlo como una lista de direcciones ('left' o 'right').
+;;   Retorna el camino como una lista de direcciones o una lista vacía si el valor `n` no se encuentra en el árbol.
+;;
+;; Signatura:
+;;   (path-helper current-path current-node)
+;; 
+;; Expresiones BNF:
+;;   <nodo> ::= ()
+;;          |  (<valor-de-scheme> <nodo>)
+;;
+;; Ejemplo de uso:
+;;   (path-helper '() '(10 (5 () ()) (15 () (20 () ())))) => '("left" "right")
+;;
+;; Requisitos:
+;;   - La entrada `current-path` es una lista que representa el camino actual desde la raíz del árbol hasta el nodo actual.
+;;   - La entrada `current-node` es un nodo del árbol binario de búsqueda.
+;;   - La función busca el camino desde la raíz hasta el nodo con el valor `n` en el BST y lo representa como una lista de direcciones.
+;;   - Si el valor `n` no se encuentra en el árbol, la función retorna una lista vacía.
+;; Función auxiliar: multiplicar-matriz
+;; Propósito:
+;;   Esta función auxiliar es utilizada por la función principal `prod-scalar-matriz`. Recibe una matriz representada como una
+;;   lista de listas y un vector representado como una lista. Su propósito es multiplicar la matriz por el vector dado y
+;;   retornar el resultado como una nueva matriz.
+;;
+;; Signatura:
+;;   (multiplicar-matriz matriz vector)
+;; 
+;; Expresiones BNF:
+;;   <matriz> ::= ()
+;;            |  (<lista> <matriz>)
+;;   <lista>  ::= ()
+;;            |  (<valor-de-scheme> <lista>)
+;;
+;; Requisitos:
+;;   - La entrada `matriz` debe ser una matriz representada como una lista de listas que cumpla con la estructura definida por las
+;;     expresiones BNF.
+;;   - La entrada `vector` debe ser un vector representado como una lista.
+;;   - La función realiza la multiplicación de la matriz por el vector, y retorna el resultado como una nueva matriz.
+;;
+
 (define path
   (lambda (n BST)
     (define path-helper
@@ -318,13 +405,13 @@
           ((null? current-node) '())
           ((= n (car current-node)) current-path)
           ((< n (car current-node))
-           (path-helper (append current-path '("left")) (cadr current-node)))
+           (cons "left" (path-helper current-path (cadr current-node))))
           (else
-           (path-helper (append current-path '("right")) (caddr current-node)))
+           (cons "right" (path-helper current-path (caddr current-node))))
           )))
     (path-helper '() BST)
-    )
   )
+)
 
 
 ;;---------------------------------------------------------------------
