@@ -105,6 +105,10 @@
             (filter-in P (cdr L))))))
 
 
+;;Ejemplos:
+> (filter-in number? '(7 4 1 3 b z))
+> (filter-in number? '(a 2 (1 f) 2 7))
+
 
 ;;5.
 ;;Función: list-index
@@ -200,8 +204,8 @@
 ;; retornar una lista de tuplas que representen el producto cartesiano entre L1
 ;; y L2. 
 ;;
-;; <lista> := ()
-;; := (<valor-de-scheme> <lista>)
+;; <producto-cartesiano> := ()
+;;                      := (<elemento-L1> <elemento-L2> <producto-cartesiano>)
 ;;
 ;; Ejemplo de uso:
 ;; > (cartesian-product '(a b c) '(x y))
@@ -216,7 +220,10 @@
       (help (help2 (lambda (x) (list (car L1) x)) L2)
                  (cartesian-product (cdr L1) L2)))))
 
+;; Ejemplos:
 
+  > (cartesian-product '(x y g) '(w j))
+  > (cartesian-product '(s d y) '(2 1 9))
 
 ;; Función: help
 ;;
@@ -400,7 +407,9 @@
     (else ; Si el primer elemento no es una lista, simplemente lo incluye en el resultado y continúa con el resto de la lista.
      (cons (car L) (up (cdr L)))))))
 
-
+;;Ejemplo: 
+> (up '((7 2) (3 2)))
+> (up '((1 1) (2 4)))
 
 ;; Función: aux
 ;;
@@ -511,17 +520,22 @@
           (apply-operations (cdr funcs) (cons (apply-operation (car funcs) (car nums) (cadr nums)) (cddr nums))))))
 
 
+;; Ejemplos: 
+> (operate '(+ - + - *) '(1 2 6 4 2 2))
+> (operate '(+ + + - *) '(1 2 5 4 1 6))
 
 ;; Función: apply-operation
 ;;
 ;; Proposito: 
 ;; F X N X N -> N’: Aplicar una operación matemática a dos números.
 ;;
-;; <lista> := ()
-;; := (<valor-de-scheme> <lista>)
-;;  
-;; 
-;; 
+;;<func-list> ::= ()
+;;                | (<func> <func-list>)
+;;
+;;<num-list>  ::= ()
+;;                | (<num> <num-list>)
+;;
+;; <func>      ::= + | - | * | /
 ;; 
 ;; Ejemplo de uso:
 ;; > (apply-operation '+ 5 3)
@@ -667,6 +681,67 @@
                       (4 (3 () ())())
                       (3 (1 () ())())))
 ;;---------------------------------------------------------------------
+
+16.
+;; Función: Operar-binarias
+;;
+;; Proposito: 
+;; N X F X N -> N’: recibe como parametro una operacion binaria valida y retorna el resultado de hacer
+;; las operaciones suma, resta y multiplicacion correspondientes
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; Ejemplo de uso:
+;; > (Operar-binarias '(5 suma (7 resta 2)))
+
+
+(define Operar-binarias
+  (lambda (x)
+    (cond
+      [(number? x) x]
+      [(list? x) (operacion (Operar-binarias (car x)) (cadr x) (Operar-binarias (caddr x)))]
+  )))
+
+(define operacion
+  (lambda (a operador b)
+    (cond
+      [(equal? operador 'suma) (+ a b)]
+      [(equal? operador 'resta) (- a b)]
+      [(equal? operador 'multiplica) (* a b)]
+      )
+    ))
+
+;; Pruebas 
+> (Operar-binarias '(5 suma (7 resta 2)))
+> (Operar-binarias '(2 multiplica (7 suma 16)))
+
+
+;; Función: operacion
+;;
+;; Proposito: 
+;; F X N X N -> N’: Realiza una operación matemática entre dos números según la función especificada.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; Ejemplo de uso:
+;; > (apply-operation '+ 3 5)
+
+
+
+
+(define operacion
+  (lambda (a operador b)
+    (cond
+      [(equal? operador 'suma) (+ a b)]
+      [(equal? operador 'resta) (- a b)]
+      [(equal? operador 'multiplica) (* a b)]
+      )
+    ))
+
 ;;17.
 ;;Función: prod-scalar-matriz
 ;; Propósito:
@@ -709,6 +784,9 @@
 
     (multiplicar-matriz matriz vector))
   )
+
+
+
 
 ;;---------------------------------------------------------------------
 ;;18.
