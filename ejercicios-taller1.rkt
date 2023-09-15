@@ -704,15 +704,6 @@
       [(list? x) (operacion (Operar-binarias (car x)) (cadr x) (Operar-binarias (caddr x)))]
   )))
 
-(define operacion
-  (lambda (a operador b)
-    (cond
-      [(equal? operador 'suma) (+ a b)]
-      [(equal? operador 'resta) (- a b)]
-      [(equal? operador 'multiplica) (* a b)]
-      )
-    ))
-
 ;; Pruebas 
 > (Operar-binarias '(5 suma (7 resta 2)))
 > (Operar-binarias '(2 multiplica (7 suma 16)))
