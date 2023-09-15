@@ -197,33 +197,6 @@
 (swapper 'a 'd '(a d () c d))
 
 ;: 7.
-;; Función: cartesian-product
-;;
-;; Proposito: 
-;; L x L -> L’: recibir como argumentos 2 listas de sımbolos sin repeticiones L1 y L2 y
-;; retornar una lista de tuplas que representen el producto cartesiano entre L1
-;; y L2. 
-;;
-;; <producto-cartesiano> := ()
-;;                      := (<elemento-L1> <elemento-L2> <producto-cartesiano>)
-;;
-;; Ejemplo de uso:
-;; > (cartesian-product '(a b c) '(x y))
-
-
-
-
-(define cartesian-product
-  (lambda(L1 L2)
-  (if (null? L1)
-      '()
-      (help (help2 (lambda (x) (list (car L1) x)) L2)
-                 (cartesian-product (cdr L1) L2)))))
-
-;; Ejemplos:
-
-  > (cartesian-product '(x y g) '(w j))
-  > (cartesian-product '(s d y) '(2 1 9))
 
 ;; Función: help
 ;;
@@ -241,8 +214,6 @@
   (if (null? lst1)
       lst2
       (cons (car lst1) (help (cdr lst1) lst2)))))
-
-
 
 
 ;; Función: help2
@@ -265,6 +236,38 @@
       '()
       (cons (func (car lst))
             (help2 func (cdr lst))))))
+
+
+
+
+;; Función: cartesian-product
+;;
+;; Proposito: 
+;; L x L -> L’: recibir como argumentos 2 listas de sımbolos sin repeticiones L1 y L2 y
+;; retornar una lista de tuplas que representen el producto cartesiano entre L1
+;; y L2. 
+;;
+;; <producto-cartesiano> := ()
+;;                      := (<elemento-L1> <elemento-L2> <producto-cartesiano>)
+;;
+;; Ejemplo de uso:
+;; > (cartesian-product '(a b c) '(x y))
+
+
+
+
+
+(define cartesian-product
+  (lambda(L1 L2)
+  (if (null? L1)
+      '()
+      (help (help2 (lambda (x) (list (car L1) x)) L2)
+                 (cartesian-product (cdr L1) L2)))))
+
+;; Ejemplos:
+
+  > (cartesian-product '(x y g) '(w j))
+  > (cartesian-product '(s d y) '(2 1 9))
 
 
 
@@ -384,32 +387,6 @@
 
 
 ;: 10.
-;; Función: up
-;;
-;; Proposito: 
-;; L -> L’: Recibe una lista L y devuelve una lista con los elementos de L y, si encuentra
-;; sublistas en L, los elementos de esas sublistas también, eliminando un nivel de
-;; anidación.
-;;
-;; <lista> := ()
-;; := (<valor-de-scheme> <lista>)
-;;
-;; Ejemplo de uso:
-;; > (up '((1 2) (3 4)))
-
-
-(define up
-  (lambda (L)
-  (cond
-    ((null? L) '()) ; Caso base: si la lista está vacía, devuelve una lista vacía.
-    ((list? (car L)) ; Si el primer elemento es una lista, elimina un par de paréntesis y concatena el resultado.
-     (aux (car L) (up (cdr L))))
-    (else ; Si el primer elemento no es una lista, simplemente lo incluye en el resultado y continúa con el resto de la lista.
-     (cons (car L) (up (cdr L)))))))
-
-;;Ejemplo: 
-> (up '((7 2) (3 2)))
-> (up '((1 1) (2 4)))
 
 ;; Función: aux
 ;;
@@ -431,6 +408,39 @@
   (cond
     ((null? lst1) lst2) ; Si la primera lista está vacía, devuelve la segunda lista.
     (else (cons (car lst1) (aux (cdr lst1) lst2))))))
+
+
+
+;; Función: up
+;;
+;; Proposito: 
+;; L -> L’: Recibe una lista L y devuelve una lista con los elementos de L y, si encuentra
+;; sublistas en L, los elementos de esas sublistas también, eliminando un nivel de
+;; anidación.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;
+;; Ejemplo de uso:
+;; > (up '((1 2) (3 4)))
+
+
+
+
+(define up
+  (lambda (L)
+  (cond
+    ((null? L) '()) ; Caso base: si la lista está vacía, devuelve una lista vacía.
+    ((list? (car L)) ; Si el primer elemento es una lista, elimina un par de paréntesis y concatena el resultado.
+     (aux (car L) (up (cdr L))))
+    (else ; Si el primer elemento no es una lista, simplemente lo incluye en el resultado y continúa con el resto de la lista.
+     (cons (car L) (up (cdr L)))))))
+
+;;Ejemplo: 
+> (up '((7 2) (3 2)))
+> (up '((1 1) (2 4)))
+
+
 
 
 
@@ -495,34 +505,6 @@
 ;;----------------------------------------------------------------------------------------------------------------------------------------
 
 ;: 13.
-;; Función: operate
-;;
-;; Proposito: 
-;; L X L -> N’: Realizar operaciones matemáticas en pares de números utilizando operadores
-;; especificados en una lista y números en otra lista.
-;;
-;; <lista> := ()
-;; := (<valor-de-scheme> <lista>)
-;;  
-;; 
-;; 
-;; 
-;; Ejemplo de uso:
-;; > (operate '(+ * + - *) '(1 2 8 4 11 6))
-
-
-(define operate
-  (lambda (funcs nums)
-  (define apply-operations
-    (lambda (funcs nums)
-      (if (null? funcs)
-          nums
-          (apply-operations (cdr funcs) (cons (apply-operation (car funcs) (car nums) (cadr nums)) (cddr nums))))))
-
-
-;; Ejemplos: 
-> (operate '(+ - + - *) '(1 2 6 4 2 2))
-> (operate '(+ + + - *) '(1 2 5 4 1 6))
 
 ;; Función: apply-operation
 ;;
@@ -552,6 +534,38 @@
       (else (error "Operación no válida")))))
   
   (apply-operations funcs nums)))
+
+
+;; Función: operate
+;;
+;; Proposito: 
+;; L X L -> N’: Realizar operaciones matemáticas en pares de números utilizando operadores
+;; especificados en una lista y números en otra lista.
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; 
+;; 
+;; Ejemplo de uso:
+;; > (operate '(+ * + - *) '(1 2 8 4 11 6))
+
+
+(define operate
+  (lambda (funcs nums)
+  (define apply-operations
+    (lambda (funcs nums)
+      (if (null? funcs)
+          nums
+          (apply-operations (cdr funcs) (cons (apply-operation (car funcs) (car nums) (cadr nums)) (cddr nums))))))
+
+
+;; Ejemplos: 
+> (operate '(+ - + - *) '(1 2 6 4 2 2))
+> (operate '(+ + + - *) '(1 2 5 4 1 6))
+
+
 
 
 ;;---------------------------------------------------------------------
@@ -683,40 +697,6 @@
 ;;---------------------------------------------------------------------
 
 16.
-;; Función: Operar-binarias
-;;
-;; Proposito: 
-;; N X F X N -> N’: recibe como parametro una operacion binaria valida y retorna el resultado de hacer
-;; las operaciones suma, resta y multiplicacion correspondientes
-;;
-;; <lista> := ()
-;; := (<valor-de-scheme> <lista>)
-;;  
-;; 
-;; Ejemplo de uso:
-;; > (Operar-binarias '(5 suma (7 resta 2)))
-
-
-(define Operar-binarias
-  (lambda (x)
-    (cond
-      [(number? x) x]
-      [(list? x) (operacion (Operar-binarias (car x)) (cadr x) (Operar-binarias (caddr x)))]
-  )))
-
-(define operacion
-  (lambda (a operador b)
-    (cond
-      [(equal? operador 'suma) (+ a b)]
-      [(equal? operador 'resta) (- a b)]
-      [(equal? operador 'multiplica) (* a b)]
-      )
-    ))
-
-;; Pruebas 
-> (Operar-binarias '(5 suma (7 resta 2)))
-> (Operar-binarias '(2 multiplica (7 suma 16)))
-
 
 ;; Función: operacion
 ;;
@@ -741,6 +721,36 @@
       [(equal? operador 'multiplica) (* a b)]
       )
     ))
+
+
+;; Función: Operar-binarias
+;;
+;; Proposito: 
+;; N X F X N -> N’: recibe como parametro una operacion binaria valida y retorna el resultado de hacer
+;; las operaciones suma, resta y multiplicacion correspondientes
+;;
+;; <lista> := ()
+;; := (<valor-de-scheme> <lista>)
+;;  
+;; 
+;; Ejemplo de uso:
+;; > (Operar-binarias '(5 suma (7 resta 2)))
+
+
+(define Operar-binarias
+  (lambda (x)
+    (cond
+      [(number? x) x]
+      [(list? x) (operacion (Operar-binarias (car x)) (cadr x) (Operar-binarias (caddr x)))]
+  )))
+
+
+;; Pruebas 
+> (Operar-binarias '(5 suma (7 resta 2)))
+> (Operar-binarias '(2 multiplica (7 suma 16)))
+
+
+
 
 ;;17.
 ;;Función: prod-scalar-matriz
